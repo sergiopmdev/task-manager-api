@@ -1,0 +1,6 @@
+{
+  "name": "task-manager-api",
+  "workspaceFolder": "/app",
+  "workspaceMount": "source=${localWorkspaceFolder},target=/app,type=bind,consistency=cached",
+  "image": "python:3.11.2-bullseye"
+}
