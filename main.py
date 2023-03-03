@@ -1,8 +1,11 @@
 from fastapi import FastAPI, Request
 from fastapi.responses import RedirectResponse
 
+from routes.users import users
+
 
 app = FastAPI()
+app.include_router(users)
 
 
 @app.get("/")
