@@ -1,7 +1,8 @@
-from typing import Dict
+from typing import Any, Dict, Union
 
-from pymongo.results import InsertOneResult
+from pymongo.collection import Collection
 
+from messages.users import users_messages
 from models.User import User
 from utils.Database import Database
 
@@ -19,9 +20,9 @@ class UserHandler:
         Email of the user
     password : str
         Password of the user
-    tasks : str
+    tasks : List[Dict[str, Any]]
         Tasks associated to the user
-    db_connection : str
+    db_connection : MongoClient
         Database connection
     """
 
@@ -43,14 +44,37 @@ class UserHandler:
         self.tasks = user.tasks
         self.db_connection = Database(**user_db).get_connection()
 
-    def create_user(self) -> InsertOneResult:
+    def _check_user_exists(
+        self, collection: Collection[User], email: str
+    ) -> Union[Dict[str, Any], None]:
+        """
+        Check for the existence of a user in the database
+
+        Parameters
+        ----------
+        collection : Collection[User]
+            Collection of users
+        email : str
+            User document field by means of which
+            the user search is to be performed
+
+        Returns
+        -------
+        Union[Dict[str, Any], None]
+            The searched user in case it exists
+            or None in case it doesn't exist
+        """
+
+        return collection.find_one({"email": email})
+
+    def create_user(self) -> str:
         """
         Insert a new user in database
 
         Returns
         -------
-        InsertOneResult
-            Result object after user insertion
+        str
+            Message with the status of the insertion
         """
 
         users_db = self.db_connection["users_db"]
@@ -63,6 +87,9 @@ class UserHandler:
             "tasks": self.tasks,
         }
 
+        if self._check_user_exists(users_collection, user["email"]) is not None:
+            return users_messages["user_exists"]
+
         inserted_user = users_collection.insert_one(user)
 
-        return inserted_user
+        return users_messages["user_created"].format(inserted_user.inserted_id)
