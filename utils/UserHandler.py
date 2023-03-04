@@ -1,5 +1,6 @@
 from typing import Any, Dict, Union
 
+from passlib.hash import sha256_crypt
 from pymongo.collection import Collection
 
 from messages.users import users_messages
@@ -44,8 +45,9 @@ class UserHandler:
         self.tasks = user.tasks
         self.db_connection = Database(**user_db).get_connection()
 
+    @staticmethod
     def _check_user_exists(
-        self, collection: Collection[User], email: str
+        collection: Collection[User], email: str
     ) -> Union[Dict[str, Any], None]:
         """
         Check for the existence of a user in the database
@@ -66,6 +68,24 @@ class UserHandler:
         """
 
         return collection.find_one({"email": email})
+
+    @staticmethod
+    def _hash_user_password(password: str) -> str:
+        """
+        Hashear user's password previously to be stored
+
+        Parameters
+        ----------
+        password : str
+            User's password
+
+        Returns
+        -------
+        str
+            Hashed password
+        """
+
+        return sha256_crypt.encrypt(password)
 
     def create_user(self) -> str:
         """
@@ -89,6 +109,8 @@ class UserHandler:
 
         if self._check_user_exists(users_collection, user["email"]) is not None:
             return users_messages["user_exists"]
+
+        user["password"] = self._hash_user_password(user["password"])
 
         inserted_user = users_collection.insert_one(user)
 
