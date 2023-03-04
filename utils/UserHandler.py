@@ -27,7 +27,7 @@ class UserHandler:
         Database connection
     """
 
-    def __init__(self, user: User, user_db: Dict[str, str]) -> None:
+    def __init__(self, user: User) -> None:
         """
         User handler constructor
 
@@ -35,15 +35,13 @@ class UserHandler:
         ----------
         user : User
             Data associated with a user
-        user_db : Dict[str, str]
-            Credentials to be able to interact with the database
         """
 
         self.name = user.name
         self.email = user.email
         self.password = user.password
         self.tasks = user.tasks
-        self.db_connection = Database(**user_db).get_connection()
+        self.db_connection = Database().get_connection()
 
     @staticmethod
     def _check_user_exists(

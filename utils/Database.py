@@ -45,31 +45,25 @@ class Database:
 
     Attributes
     ----------
-    username : str
+    _credentials : UserDB
+        Database credentials
+    _username : str
         Database username
-    password : str
+    _password : str
         Password associated to the username
-    cluster : str
+    _cluster : str
         Cluster of the database to be accessed
     """
 
-    def __init__(self, username: str, password: str, cluster: str) -> None:
+    def __init__(self) -> None:
         """
         MongoDB client generator constructor
-
-        Parameters
-        ----------
-        username : str
-            Database username
-        password : str
-            Password associated to the username
-        cluster : str
-            Cluster of the database to be accessed
         """
 
-        self._username = username
-        self._password = password
-        self._cluster = cluster
+        self._credentials = get_db_credentials()
+        self._username = self._credentials.username
+        self._password = self._credentials.password
+        self._cluster = self._credentials.cluster
 
     def _get_string_connection(self) -> str:
         """
