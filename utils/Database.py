@@ -67,9 +67,9 @@ class Database:
             Cluster of the database to be accessed
         """
 
-        self.username = username
-        self.password = password
-        self.cluster = cluster
+        self._username = username
+        self._password = password
+        self._cluster = cluster
 
     def _get_string_connection(self) -> str:
         """
@@ -82,7 +82,7 @@ class Database:
         """
 
         return (
-            f"mongodb+srv://{self.username}:{self.password}@{self.cluster}"
+            f"mongodb+srv://{self._username}:{self._password}@{self._cluster}"
             ".zss0em4.mongodb.net/?retryWrites=true&w=majority"
         )
 

@@ -12,4 +12,5 @@ users = APIRouter()
 def create_user(user: User):
     db_credentials = dict(get_db_credentials())
     user_handler = UserHandler(user=user, user_db=db_credentials)
-    return {"user": user_handler.name}
+    new_user = user_handler.create_user()
+    return {"user_id": str(new_user.inserted_id)}

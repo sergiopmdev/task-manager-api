@@ -1,5 +1,7 @@
 from typing import Dict
 
+from pymongo.results import InsertOneResult
+
 from models.User import User
 from utils.Database import Database
 
@@ -40,3 +42,27 @@ class UserHandler:
         self.password = user.password
         self.tasks = user.tasks
         self.db_connection = Database(**user_db).get_connection()
+
+    def create_user(self) -> InsertOneResult:
+        """
+        Insert a new user in database
+
+        Returns
+        -------
+        InsertOneResult
+            Result object after user insertion
+        """
+
+        users_db = self.db_connection["users_db"]
+        users_collection = users_db["users_collection"]
+
+        user = {
+            "name": self.name,
+            "email": self.email,
+            "password": self.password,
+            "tasks": self.tasks,
+        }
+
+        inserted_user = users_collection.insert_one(user)
+
+        return inserted_user
