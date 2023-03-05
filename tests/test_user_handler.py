@@ -1,3 +1,4 @@
+import os
 from unittest import mock
 from unittest.mock import MagicMock
 
@@ -8,12 +9,20 @@ from models.User import User
 from utils.UserHandler import UserHandler
 
 
+mocked_db_credentials = {
+    "DB_USERNAME": "username",
+    "DB_PASSWORD": "password",
+    "DB_CLUSTER": "cluster",
+}
+
+
 @pytest.fixture
 def user() -> User:
     return User(name="name", email="email", password="password")
 
 
 @pytest.fixture
+@mock.patch.dict(os.environ, mocked_db_credentials, clear=True)
 @mock.patch("utils.UserHandler.Database.get_connection", MagicMock())
 def user_handler(user: User) -> UserHandler:
     return UserHandler(user=user)

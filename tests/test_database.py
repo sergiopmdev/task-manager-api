@@ -15,6 +15,7 @@ mocked_db_credentials = {
 }
 
 
+@mock.patch.dict(os.environ, mocked_db_credentials, clear=True)
 def test_db_credentials():
     assert isinstance(get_db_credentials(), UserDB)
 
