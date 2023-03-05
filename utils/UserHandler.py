@@ -83,7 +83,7 @@ class UserHandler:
             Hashed password
         """
 
-        return sha256_crypt.encrypt(password)
+        return sha256_crypt.hash(password)
 
     def create_user(self) -> str:
         """
