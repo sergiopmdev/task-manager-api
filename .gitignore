@@ -6,3 +6,6 @@ __pycache__
 
 # Environment variables
 .env
+
+# Pytest library cache
+.pytest_cache
