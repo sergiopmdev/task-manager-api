@@ -10,5 +10,4 @@ app.include_router(users)
 
 @app.get("/")
 def read_root(request: Request):
-    "This is a test"
     return RedirectResponse(url=request.url._url + "docs")
