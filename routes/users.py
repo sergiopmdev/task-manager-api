@@ -1,4 +1,5 @@
 from fastapi import APIRouter, HTTPException
+from exceptions.users import UserAlreadyExists
 
 from messages.users import users_messages
 from models.User import User
@@ -15,6 +16,5 @@ def create_user(user: User):
     user_status = user_handler.create_user()
 
     if user_status == users_messages["user_exists"]:
-        return HTTPException(status_code=409, detail=user_status)
-
+        raise UserAlreadyExists(status_code=409, detail=user_status)
     return {"status": user_status}

@@ -2,6 +2,8 @@ from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import RedirectResponse
 
+from exceptions.handlers import exception_409_handler
+from exceptions.users import UserAlreadyExists
 from routes.users import users
 
 
@@ -18,6 +20,8 @@ app.add_middleware(
 )
 
 app.include_router(users)
+
+app.add_exception_handler(UserAlreadyExists, exception_409_handler)
 
 
 @app.get("/")
