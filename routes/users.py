@@ -1,4 +1,4 @@
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter
 from exceptions.users import UserAlreadyExists
 
 from messages.users import users_messages
