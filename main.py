@@ -13,6 +13,9 @@ origins = [
     "http://127.0.0.1:5173",
     "http://localhost:5173",
     "https://task-manager-50u4.onrender.com",
+    "3.75.158.163",
+    "3.125.183.140",
+    "35.157.117.28",
 ]
 
 app.add_middleware(
